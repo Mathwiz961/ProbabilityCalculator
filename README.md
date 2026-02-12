@@ -89,5 +89,44 @@ Edit a Canvas page → Switch to **HTML editor** → Paste:
 
 > ⚠️ Important: Use the `github.io` URL — not `github.com`.  
 > Canvas blocks embedded `github.com` pages.
+```
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License**.
+
+You are free to:
+
+- Use  
+- Modify  
+- Distribute  
+- Embed in LMS platforms (including Canvas)  
+- Adapt for instructional or institutional use  
+
+As long as the original license notice is included.
+
+See the `LICENSE` file in this repository for the full text of the MIT License.
 
 ---
+
+## 🎓 Intended Use
+
+This tool was developed for instructional use in:
+
+- Introductory Statistics  
+- Probability  
+- Business Statistics  
+- Engineering Statistics  
+
+It is:
+
+- Fully client-side (no server required)  
+- No data storage  
+- No tracking  
+- No external dependencies  
+
+Designed specifically for easy deployment via **GitHub Pages** and embedding into learning management systems such as **Canvas**.
+
+---
+
