@@ -3,213 +3,316 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Distribution Probability Tool</title>
+  <title>ERAU Probability Calculator</title>
+
   <style>
     :root{
-      --bg:#ffffff; --card:#111b33; --text:#e7ecff; --muted:#a9b4de;
-      --accent:#7aa2ff; --bad:#ff6b6b; --good:#45d483; --line:rgba(255,255,255,.12);
+      /* ERAU brand (from brand guide) */
+      --navy:#03539E;   /* Unrivaled Blue */
+      --gold:#FFCB06;   /* Sunrise Yellow */
+
+      /* Light UI */
+      --bg:#ffffff;
+      --surface:#f3f5f7;
+      --surface2:#eef1f4;
+      --line:#d6dbe1;
+
+      /* Text */
+      --text:#0f172a;
+      --muted:#475569;
+
+      /* Buttons */
+      --btn:#03539E;
+      --btnHover:#023f78;
+      --btnText:#ffffff;
+
+      /* Accents */
+      --chipBg:#ffffff;
+      --chipLine:#d6dbe1;
+
+      /* Status */
+      --bad:#b91c1c;
+      --good:#166534;
     }
-    body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      background:linear-gradient(180deg,#070c18,#0b1220); color:var(--text); }
-    .wrap{ max-width:1100px; margin:0 auto; padding:20px; }
-    h1{ margin:0 0 6px; font-size:20px; font-weight:700; letter-spacing:.2px; }
-    .sub{ color:var(--muted); font-size:13px; margin-bottom:14px; }
-    .grid{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
-    @media (max-width: 900px){ .grid{ grid-template-columns:1fr; } }
-    .card{ background:rgba(17,27,51,.85); border:1px solid var(--line); border-radius:14px;
-      padding:14px; box-shadow:0 12px 30px rgba(0,0,0,.25); }
-    .card h2{ margin:0 0 10px; font-size:15px; font-weight:650; }
+
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    .wrap{ max-width:1100px; margin:0 auto; padding:18px 18px 28px; }
+
+    .header{
+      background:linear-gradient(90deg, var(--navy), #002d57);
+      color:#fff;
+      border-bottom:4px solid var(--gold);
+      padding:16px 18px;
+    }
+    .header-inner{ max-width:1100px; margin:0 auto; display:flex; align-items:center; gap:12px; }
+    .mark{
+      width:10px; height:36px; border-radius:8px;
+      background:var(--gold);
+      box-shadow:0 0 0 4px rgba(255,203,6,.22);
+    }
+    h1{ margin:0; font-size:18px; font-weight:750; letter-spacing:.2px; }
+    .sub{ margin-top:4px; font-size:12.5px; opacity:.9; }
+
+    .grid{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-top:16px; }
+    @media (max-width: 900px){ .grid{ grid-template-columns: 1fr; } }
+
+    .card{
+      background:var(--surface);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      box-shadow:0 6px 18px rgba(2, 31, 59, .08);
+    }
+    .card h2{ margin:0 0 10px; font-size:15px; font-weight:700; color:#0b1b33; }
+
     label{ display:block; color:var(--muted); font-size:12px; margin:10px 0 6px; }
+
     input, select, textarea{
-      width:100%; box-sizing:border-box; padding:10px 10px; border-radius:10px;
-      border:1px solid var(--line); background:rgba(15,23,48,.8); color:var(--text);
+      width:100%;
+      box-sizing:border-box;
+      padding:10px 10px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#ffffff;
+      color:var(--text);
       outline:none;
     }
     textarea{ min-height:110px; resize:vertical; }
+
     .row{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
     .pillrow{ display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; }
+
     .pill{
-      border:1px solid var(--line); background:rgba(15,23,48,.7);
-      padding:8px 10px; border-radius:999px; display:flex; align-items:center; gap:8px;
-      color:var(--muted); font-size:12px;
+      border:1px solid var(--chipLine);
+      background:var(--chipBg);
+      padding:8px 10px;
+      border-radius:999px;
+      display:flex; align-items:center; gap:8px;
+      color:var(--muted);
+      font-size:12px;
     }
+
     .btn{
-      cursor:pointer; border:1px solid rgba(122,162,255,.55); background:rgba(122,162,255,.18);
-      color:var(--text); border-radius:12px; padding:10px 12px; font-weight:650;
-      transition: transform .05s ease-in-out, background .2s;
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,.0);
+      background:var(--btn);
+      color:var(--btnText);
+      border-radius:14px;
+      padding:10px 12px;
+      font-weight:750;
+      transition: background .2s ease, transform .05s ease-in-out;
+      box-shadow:0 6px 14px rgba(3,83,158,.22);
     }
-    .btn:hover{ background:rgba(122,162,255,.25); }
+    .btn:hover{ background:var(--btnHover); }
     .btn:active{ transform: translateY(1px); }
-    .btn.secondary{ border:1px solid var(--line); background:rgba(255,255,255,.06); }
+
+    .btn.secondary{
+      background:#ffffff;
+      color:var(--navy);
+      border:1px solid rgba(3,83,158,.35);
+      box-shadow:none;
+    }
+    .btn.secondary:hover{ background:var(--surface2); }
+
     .out{
-      background:rgba(15,23,48,.7); border:1px solid var(--line); border-radius:14px; padding:12px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:13px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size:13px;
       white-space:pre-wrap;
     }
+
     .hint{ color:var(--muted); font-size:12px; margin-top:8px; line-height:1.35; }
-    .warn{ color:#ffd18a; }
-    .err{ color:var(--bad); font-weight:650; }
-    .ok{ color:var(--good); font-weight:650; }
+    .err{ color:var(--bad); font-weight:750; }
+    .ok{ color:var(--good); font-weight:750; }
     .hide{ display:none !important; }
-    .footer{ margin-top:12px; color:var(--muted); font-size:11px; }
-    .kbd{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; padding:1px 6px;
-      border-radius:6px; border:1px solid var(--line); background:rgba(255,255,255,.06); }
+
+    .footer{
+      margin-top:14px;
+      color:var(--muted);
+      font-size:11.5px;
+      border-top:1px solid var(--line);
+      padding-top:10px;
+    }
+    .badge{
+      display:inline-block;
+      background:rgba(255,203,6,.35);
+      border:1px solid rgba(255,203,6,.65);
+      color:#3a2b00;
+      padding:2px 8px;
+      border-radius:999px;
+      font-weight:700;
+      margin-left:8px;
+      font-size:11px;
+    }
   </style>
 </head>
+
 <body>
-<div class="wrap">
-  <h1>Distribution Probability Tool</h1>
-  <div class="sub">
-    <h4></h4>Choose Binomial / Poisson / Normal. Compute P(X &lt; / ≤ / = / &gt; / ≥ x) or between endpoints (inclusive/exclusive).
-    Binomial &amp; Poisson optionally support a Normal approximation (with continuity correction).</h4>
+  <div class="header">
+    <div class="header-inner">
+      <div class="mark" aria-hidden="true"></div>
+      <div>
+        <h1>Probability Calculator <span class="badge">ERAU Theme</span></h1>
+        <div class="sub">Binomial • Poisson • Normal — exact + Normal approximation (with continuity correction) for discrete</div>
+      </div>
+    </div>
   </div>
 
-  <div class="grid">
-    <div class="card">
-      <h2>1) Distribution & Parameters</h2>
+  <div class="wrap">
+    <div class="grid">
+      <div class="card">
+        <h2>1) Distribution & Parameters</h2>
 
-      <label for="dist">Distribution</label>
-      <select id="dist">
-        <option value="binom">Binomial (n, p)</option>
-        <option value="pois">Poisson (λ)</option>
-        <option value="norm">Normal (μ, σ)</option>
-      </select>
+        <label for="dist">Distribution</label>
+        <select id="dist">
+          <option value="binom">Binomial (n, p)</option>
+          <option value="pois">Poisson (λ)</option>
+          <option value="norm">Normal (μ, σ)</option>
+        </select>
 
-      <div id="binomParams">
-        <div class="row">
-          <div>
-            <label for="n">n (number of trials)</label>
-            <input id="n" type="number" step="1" min="0" value="10" />
-          </div>
-          <div>
-            <label for="p">p (success probability)</label>
-            <input id="p" type="number" step="0.0001" min="0" max="1" value="0.5" />
-          </div>
-        </div>
-        <div class="pillrow">
-          <label class="pill">
-            <input type="checkbox" id="binomApprox" />
-            Use Normal approximation (continuity correction)
-          </label>
-        </div>
-        <div class="hint">Binomial support: X = 0,1,2,…,n</div>
-      </div>
-
-      <div id="poisParams" class="hide">
-        <label for="lambda">λ (rate)</label>
-        <input id="lambda" type="number" step="0.0001" min="0" value="3" />
-        <div class="pillrow">
-          <label class="pill">
-            <input type="checkbox" id="poisApprox" />
-            Use Normal approximation (continuity correction)
-          </label>
-        </div>
-        <div class="hint">Poisson support: X = 0,1,2,…</div>
-      </div>
-
-      <div id="normParams" class="hide">
-        <label>Normal inputs</label>
-        <div class="pillrow">
-          <label class="pill"><input type="radio" name="normMode" value="params" checked /> Use μ and σ</label>
-          <label class="pill"><input type="radio" name="normMode" value="data" /> Estimate from data</label>
-        </div>
-
-        <div id="normParamBlock">
+        <div id="binomParams">
           <div class="row">
             <div>
-              <label for="mu">μ (mean)</label>
-              <input id="mu" type="number" step="0.0001" value="0" />
+              <label for="n">n (trials)</label>
+              <input id="n" type="number" step="1" min="0" value="10" />
             </div>
             <div>
-              <label for="sigma">σ (standard deviation)</label>
-              <input id="sigma" type="number" step="0.0001" min="0" value="1" />
+              <label for="p">p (success probability)</label>
+              <input id="p" type="number" step="0.0001" min="0" max="1" value="0.5" />
             </div>
           </div>
-        </div>
-
-        <div id="normDataBlock" class="hide">
-          <label for="data">Paste data (numbers separated by commas/spaces/new lines)</label>
-          <textarea id="data" placeholder="Example:
-12, 14, 11, 15, 13"></textarea>
           <div class="pillrow">
-            <label class="pill"><input type="radio" name="sdMode" value="sample" checked /> sample s (n−1)</label>
-            <label class="pill"><input type="radio" name="sdMode" value="population" /> population σ (n)</label>
+            <label class="pill">
+              <input type="checkbox" id="binomApprox" />
+              Use Normal approximation (continuity correction)
+            </label>
           </div>
-          <button class="btn secondary" id="estimateBtn" type="button">Estimate μ and σ from data</button>
-          <div class="hint warn">Normal is continuous: P(X = x) = 0, and ≤ vs &lt; makes no difference.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>2) Probability Query</h2>
-
-      <label for="qtype">Choose probability form</label>
-      <select id="qtype">
-        <option value="lt">P(X &lt; x)</option>
-        <option value="le">P(X ≤ x)</option>
-        <option value="eq">P(X = x)</option>
-        <option value="gt">P(X &gt; x)</option>
-        <option value="ge">P(X ≥ x)</option>
-        <option value="between">P(a ? X ? b)</option>
-      </select>
-
-      <div id="singleX">
-        <label for="x">x</label>
-        <input id="x" type="number" step="0.0001" value="3" />
-        <div class="hint" id="discreteHint"></div>
-      </div>
-
-      <div id="betweenAB" class="hide">
-        <div class="row">
-          <div>
-            <label for="a">a</label>
-            <input id="a" type="number" step="0.0001" value="2" />
-          </div>
-          <div>
-            <label for="b">b</label>
-            <input id="b" type="number" step="0.0001" value="6" />
-          </div>
+          <div class="hint">Binomial support: X = 0,1,2,…,n</div>
         </div>
 
-        <div class="row">
-          <div>
-            <label>Left endpoint</label>
-            <select id="ainc">
-              <option value="inc">Include a (≤ / ≥)</option>
-              <option value="exc">Exclude a (&lt; / &gt;)</option>
-            </select>
+        <div id="poisParams" class="hide">
+          <label for="lambda">λ (rate)</label>
+          <input id="lambda" type="number" step="0.0001" min="0" value="3" />
+          <div class="pillrow">
+            <label class="pill">
+              <input type="checkbox" id="poisApprox" />
+              Use Normal approximation (continuity correction)
+            </label>
           </div>
-          <div>
-            <label>Right endpoint</label>
-            <select id="binc">
-              <option value="inc">Include b (≤ / ≥)</option>
-              <option value="exc">Exclude b (&lt; / &gt;)</option>
-            </select>
-          </div>
+          <div class="hint">Poisson support: X = 0,1,2,…</div>
         </div>
 
-        <div class="hint" id="betweenHint"></div>
+        <div id="normParams" class="hide">
+          <label>Normal inputs</label>
+          <div class="pillrow">
+            <label class="pill"><input type="radio" name="normMode" value="params" checked /> Use μ and σ</label>
+            <label class="pill"><input type="radio" name="normMode" value="data" /> Estimate from data</label>
+          </div>
+
+          <div id="normParamBlock">
+            <div class="row">
+              <div>
+                <label for="mu">μ (mean)</label>
+                <input id="mu" type="number" step="0.0001" value="0" />
+              </div>
+              <div>
+                <label for="sigma">σ (standard deviation)</label>
+                <input id="sigma" type="number" step="0.0001" min="0" value="1" />
+              </div>
+            </div>
+          </div>
+
+          <div id="normDataBlock" class="hide">
+            <label for="data">Paste data (numbers separated by commas/spaces/new lines)</label>
+            <textarea id="data" placeholder="Example:
+12, 14, 11, 15, 13"></textarea>
+            <div class="pillrow">
+              <label class="pill"><input type="radio" name="sdMode" value="sample" checked /> sample s (n−1)</label>
+              <label class="pill"><input type="radio" name="sdMode" value="population" /> population σ (n)</label>
+            </div>
+            <button class="btn secondary" id="estimateBtn" type="button">Estimate μ and σ from data</button>
+            <div class="hint">Normal is continuous: P(X = x) = 0 and ≤ vs &lt; makes no difference.</div>
+          </div>
+        </div>
       </div>
 
-      <div class="pillrow" style="margin-top:12px;">
-        <button class="btn" id="calcBtn" type="button">Compute Probability</button>
-        <button class="btn secondary" id="resetBtn" type="button">Reset</button>
-      </div>
+      <div class="card">
+        <h2>2) Probability Query</h2>
 
-      <label>Output</label>
-      <div class="out" id="out">Ready.</div>
+        <label for="qtype">Choose probability form</label>
+        <select id="qtype">
+          <option value="lt">P(X &lt; x)</option>
+          <option value="le">P(X ≤ x)</option>
+          <option value="eq">P(X = x)</option>
+          <option value="gt">P(X &gt; x)</option>
+          <option value="ge">P(X ≥ x)</option>
+          <option value="between">P(a ? X ? b)</option>
+        </select>
 
-      <div class="footer">
-        Tip: For Binomial/Poisson exact mode, x/a/b are treated as integer counts (floored). For Normal approx, continuity correction is applied.
+        <div id="singleX">
+          <label for="x">x</label>
+          <input id="x" type="number" step="0.0001" value="3" />
+          <div class="hint" id="discreteHint"></div>
+        </div>
+
+        <div id="betweenAB" class="hide">
+          <div class="row">
+            <div>
+              <label for="a">a</label>
+              <input id="a" type="number" step="0.0001" value="2" />
+            </div>
+            <div>
+              <label for="b">b</label>
+              <input id="b" type="number" step="0.0001" value="6" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Left endpoint</label>
+              <select id="ainc">
+                <option value="inc">Include a (≤ / ≥)</option>
+                <option value="exc">Exclude a (&lt; / &gt;)</option>
+              </select>
+            </div>
+            <div>
+              <label>Right endpoint</label>
+              <select id="binc">
+                <option value="inc">Include b (≤ / ≥)</option>
+                <option value="exc">Exclude b (&lt; / &gt;)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="hint" id="betweenHint"></div>
+        </div>
+
+        <div class="pillrow" style="margin-top:12px;">
+          <button class="btn" id="calcBtn" type="button">Compute Probability</button>
+          <button class="btn secondary" id="resetBtn" type="button">Reset</button>
+        </div>
+
+        <label>Output</label>
+        <div class="out" id="out">Ready.</div>
+
+        <div class="footer">
+          Tip: Binomial/Poisson exact mode floors x/a/b to integers. Normal approximation uses continuity correction.
+        </div>
       </div>
     </div>
   </div>
 
-
-
 <script>
-/* ---------- Core math helpers (no external libraries) ---------- */
+/* ---------- Math helpers (no external libraries) ---------- */
 
 // erf approximation
 function erf(x){
@@ -225,7 +328,7 @@ function normalCDF(z){
   return 0.5 * (1 + erf(z / Math.SQRT2));
 }
 
-// Lanczos log-gamma
+// Lanczos approximation for log-gamma
 function logGamma(z){
   const p = [
     676.5203681218851, -1259.1392167224028, 771.32342877765313,
@@ -249,7 +352,7 @@ function logChoose(n,k){
   return logFactorial(n) - logFactorial(k) - logFactorial(n-k);
 }
 
-/* ---------- Binomial exact ---------- */
+// Binomial PMF/CDF
 function binomPMF(k,n,p){
   if (k < 0 || k > n) return 0;
   if (p < 0 || p > 1) return NaN;
@@ -267,7 +370,7 @@ function binomCDF(k,n,p){
   return Math.min(1, Math.max(0, s));
 }
 
-/* ---------- Poisson exact ---------- */
+// Poisson PMF/CDF
 function poisPMF(k,lambda){
   if (k < 0) return 0;
   if (lambda < 0) return NaN;
@@ -284,13 +387,19 @@ function poisCDF(k,lambda){
   return Math.min(1, Math.max(0, s));
 }
 
-/* ---------- Data parsing for Normal estimation ---------- */
+// Parsing numeric data
 function parseNumbers(text){
-  const parts = text.replace(/[\t\r\n]+/g, " ").replace(/,/g, " ").trim()
-    .split(/\s+/).filter(Boolean);
+  const parts = text
+    .replace(/[\t\r\n]+/g, " ")
+    .replace(/,/g, " ")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
   return parts.map(v => Number(v)).filter(v => Number.isFinite(v));
 }
-function mean(nums){ return nums.reduce((a,b)=>a+b,0) / nums.length; }
+function mean(nums){
+  return nums.reduce((a,b)=>a+b,0) / nums.length;
+}
 function sd(nums, mode){
   const m = mean(nums);
   const ss = nums.reduce((a,b)=>a+(b-m)*(b-m),0);
@@ -298,7 +407,8 @@ function sd(nums, mode){
   return Math.sqrt(ss/denom);
 }
 
-/* ---------- Probability helpers ---------- */
+/* ---------- Probability wrappers ---------- */
+
 function probSingleDiscrete(cdfFunc, x, kind){
   const xf = Math.floor(x);
   if (kind === "lt") return cdfFunc(xf - 1);
@@ -307,39 +417,47 @@ function probSingleDiscrete(cdfFunc, x, kind){
   if (kind === "ge") return 1 - cdfFunc(xf - 1);
   return NaN;
 }
+
 function probBetweenDiscrete(cdfFunc, a, b, incA, incB){
-  let lo = Math.floor(a), hi = Math.floor(b);
+  let lo = Math.floor(a);
+  let hi = Math.floor(b);
   if (hi < lo){ const t=lo; lo=hi; hi=t; }
+
   const lowerK = incA ? lo : (lo + 1);
   const upperK = incB ? hi : (hi - 1);
   if (upperK < lowerK) return 0;
+
   return cdfFunc(upperK) - cdfFunc(lowerK - 1);
 }
+
 function probEqDiscrete(pmfFunc, x){
   const k = Math.floor(x);
   return pmfFunc(k);
 }
 
-/* ---------- Normal (exact) ---------- */
 function probSingleNormal(mu, sigma, x, kind){
+  if (sigma <= 0) return NaN;
   const z = (x - mu) / sigma;
   const F = normalCDF(z);
   if (kind === "lt" || kind === "le") return F;
   if (kind === "gt" || kind === "ge") return 1 - F;
   return NaN;
 }
+
 function probBetweenNormal(mu, sigma, a, b){
+  if (sigma <= 0) return NaN;
   let lo = a, hi = b;
   if (hi < lo){ const t=lo; lo=hi; hi=t; }
-  return normalCDF((hi - mu)/sigma) - normalCDF((lo - mu)/sigma);
+  const Fhi = normalCDF((hi - mu)/sigma);
+  const Flo = normalCDF((lo - mu)/sigma);
+  return Fhi - Flo;
 }
 
-/* ---------- Normal approximation for discrete with continuity correction ---------- */
+// Normal approximation for discrete RVs using continuity correction
 function approxDiscreteByNormal(mu, sigma, qt, x, a, b, incA, incB){
   const Phi = (t)=>normalCDF((t - mu)/sigma);
 
   if (qt === "eq"){
-    // P(X=x) ≈ P(x-0.5 < Y < x+0.5)
     return Phi(x + 0.5) - Phi(x - 0.5);
   }
   if (qt === "lt") return Phi(x - 0.5);
@@ -350,19 +468,23 @@ function approxDiscreteByNormal(mu, sigma, qt, x, a, b, incA, incB){
   if (qt === "between"){
     let lo = a, hi = b;
     if (hi < lo){ const t=lo; lo=hi; hi=t; }
+
     const left  = incA ? (lo - 0.5) : (lo + 0.5);
     const right = incB ? (hi + 0.5) : (hi - 0.5);
+
     if (right < left) return 0;
     return Phi(right) - Phi(left);
   }
+
   return NaN;
 }
 
-/* ---------- UI wiring ---------- */
+/* ---------- UI logic ---------- */
+
 const distEl = document.getElementById("dist");
 const binomParams = document.getElementById("binomParams");
-const poisParams  = document.getElementById("poisParams");
-const normParams  = document.getElementById("normParams");
+const poisParams = document.getElementById("poisParams");
+const normParams = document.getElementById("normParams");
 
 const qtypeEl = document.getElementById("qtype");
 const singleX = document.getElementById("singleX");
@@ -386,11 +508,11 @@ function refreshDistUI(){
 
   const isDiscrete = (d === "binom" || d === "pois");
   discreteHint.textContent = isDiscrete
-    ? "Discrete: x is treated as a count (floored to an integer for exact Binomial/Poisson)."
+    ? "Discrete: exact mode floors x to an integer count. Approx mode uses continuity correction."
     : "Normal is continuous: P(X=x)=0 and ≤ vs < makes no difference.";
 
   betweenHint.textContent = isDiscrete
-    ? "Discrete: choose whether to include/exclude endpoints (exact). Normal approx uses continuity correction."
+    ? "Discrete: include/exclude endpoints supported (exact + approx)."
     : "Normal is continuous: inclusive/exclusive endpoints give the same probability.";
 }
 
@@ -408,15 +530,15 @@ function refreshNormalModeUI(){
 
 distEl.addEventListener("change", ()=>{ refreshDistUI(); setOutput("Ready."); });
 qtypeEl.addEventListener("change", ()=>{ refreshQueryUI(); setOutput("Ready."); });
-document.querySelectorAll('input[name="normMode"]').forEach(r =>
-  r.addEventListener("change", ()=>{ refreshNormalModeUI(); setOutput("Ready."); })
-);
+document.querySelectorAll('input[name="normMode"]').forEach(r => r.addEventListener("change", ()=>{
+  refreshNormalModeUI(); setOutput("Ready.");
+}));
 
 document.getElementById("estimateBtn").addEventListener("click", ()=>{
   const txt = document.getElementById("data").value;
   const nums = parseNumbers(txt);
   if (nums.length < 2){
-    setOutput("Error: Provide at least 2 numeric values to estimate μ and σ.", "err");
+    setOutput("Error: Please provide at least 2 numeric values to estimate μ and σ.", "err");
     return;
   }
   const sdMode = document.querySelector('input[name="sdMode"]:checked').value;
@@ -424,7 +546,7 @@ document.getElementById("estimateBtn").addEventListener("click", ()=>{
   const s = sd(nums, sdMode);
   document.getElementById("mu").value = String(m);
   document.getElementById("sigma").value = String(s);
-  setOutput(`Estimated from data (${nums.length} values):\nμ ≈ ${m}\nσ ≈ ${s}\n\nNow compute a probability.`, "ok");
+  setOutput(`Estimated from data (${nums.length} values):\nμ ≈ ${m}\nσ ≈ ${s}\n\nNow choose a probability form and click Compute.`, "ok");
 });
 
 document.getElementById("resetBtn").addEventListener("click", ()=>{
@@ -433,19 +555,25 @@ document.getElementById("resetBtn").addEventListener("click", ()=>{
   document.getElementById("n").value = 10;
   document.getElementById("p").value = 0.5;
   document.getElementById("binomApprox").checked = false;
+
   document.getElementById("lambda").value = 3;
   document.getElementById("poisApprox").checked = false;
+
   document.getElementById("mu").value = 0;
   document.getElementById("sigma").value = 1;
   document.getElementById("data").value = "";
   document.querySelector('input[name="normMode"][value="params"]').checked = true;
   document.querySelector('input[name="sdMode"][value="sample"]').checked = true;
+
   document.getElementById("x").value = 3;
   document.getElementById("a").value = 2;
   document.getElementById("b").value = 6;
   document.getElementById("ainc").value = "inc";
   document.getElementById("binc").value = "inc";
-  refreshDistUI(); refreshQueryUI(); refreshNormalModeUI();
+
+  refreshDistUI();
+  refreshQueryUI();
+  refreshNormalModeUI();
   setOutput("Ready.");
 });
 
@@ -482,16 +610,15 @@ document.getElementById("calcBtn").addEventListener("click", ()=>{
         const muA = n * p;
         const sigmaA = Math.sqrt(n * p * (1 - p));
         if (!(sigmaA > 0)) throw new Error("Normal approximation not valid when σ = 0.");
-        prob = (qt === "between")
-          ? approxDiscreteByNormal(muA, sigmaA, qt, x, a, b, incA, incB)
-          : approxDiscreteByNormal(muA, sigmaA, qt, x, a, b, incA, incB);
+        prob = approxDiscreteByNormal(muA, sigmaA, qt, x, a, b, incA, incB);
         summary = `Binomial(n=${n}, p=${p}) — Normal approx\nμ=${muA}, σ=${sigmaA}\nQuery: ${qt}`;
       } else {
         const cdf = (k)=>binomCDF(k,n,p);
         const pmf = (k)=>binomPMF(k,n,p);
+
         if (qt === "between"){
           prob = probBetweenDiscrete(cdf, a, b, incA, incB);
-          summary = `Binomial(n=${n}, p=${p}) — exact\nBetween: a=${a} (${incA?"inc":"exc"}), b=${b} (${incB?"inc":"exc"})`;
+          summary = `Binomial(n=${n}, p=${p}) — exact\nBetween: a=${a} (${incA?"included":"excluded"}), b=${b} (${incB?"included":"excluded"})`;
         } else if (qt === "eq"){
           prob = probEqDiscrete(pmf, x);
           summary = `Binomial(n=${n}, p=${p}) — exact\nP(X = ${Math.floor(x)})`;
@@ -512,16 +639,15 @@ document.getElementById("calcBtn").addEventListener("click", ()=>{
         const muA = lambda;
         const sigmaA = Math.sqrt(lambda);
         if (!(sigmaA > 0)) throw new Error("Normal approximation not valid when σ = 0.");
-        prob = (qt === "between")
-          ? approxDiscreteByNormal(muA, sigmaA, qt, x, a, b, incA, incB)
-          : approxDiscreteByNormal(muA, sigmaA, qt, x, a, b, incA, incB);
+        prob = approxDiscreteByNormal(muA, sigmaA, qt, x, a, b, incA, incB);
         summary = `Poisson(λ=${lambda}) — Normal approx\nμ=${muA}, σ=${sigmaA}\nQuery: ${qt}`;
       } else {
         const cdf = (k)=>poisCDF(k,lambda);
         const pmf = (k)=>poisPMF(k,lambda);
+
         if (qt === "between"){
           prob = probBetweenDiscrete(cdf, a, b, incA, incB);
-          summary = `Poisson(λ=${lambda}) — exact\nBetween: a=${a} (${incA?"inc":"exc"}), b=${b} (${incB?"inc":"exc"})`;
+          summary = `Poisson(λ=${lambda}) — exact\nBetween: a=${a} (${incA?"included":"excluded"}), b=${b} (${incB?"included":"excluded"})`;
         } else if (qt === "eq"){
           prob = probEqDiscrete(pmf, x);
           summary = `Poisson(λ=${lambda}) — exact\nP(X = ${Math.floor(x)})`;
@@ -542,7 +668,7 @@ document.getElementById("calcBtn").addEventListener("click", ()=>{
         prob = probBetweenNormal(mu, sigma, a, b);
         summary = `Normal(μ=${mu}, σ=${sigma})\nBetween: a=${a}, b=${b} (inclusive/exclusive same)`;
       } else if (qt === "eq"){
-        prob = 0; // continuous
+        prob = 0;
         summary = `Normal(μ=${mu}, σ=${sigma})\nP(X = ${x}) = 0 (continuous)`;
       } else {
         prob = probSingleNormal(mu, sigma, x, qt);
@@ -566,3 +692,4 @@ refreshNormalModeUI();
 </script>
 </body>
 </html>
+
