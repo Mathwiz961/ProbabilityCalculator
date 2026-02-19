@@ -50,7 +50,14 @@
       border-bottom:4px solid var(--gold);
       padding:16px 18px;
     }
-    .header-inner{ max-width:1100px; margin:0 auto; display:flex; align-items:center; gap:12px; }
+    .header-inner{
+  max-width:1100px;
+  margin:0 auto;
+  display:flex;
+  justify-content:space-between;   /* pushes left and right apart */
+  align-items:center;              /* vertical centering */
+}
+
     .mark{
       width:10px; height:36px; border-radius:8px;
       background:var(--gold);
@@ -142,30 +149,27 @@
       border-top:1px solid var(--line);
       padding-top:10px;
     }
-    .badge{
-      display:inline-block;
-      background:rgba(255,203,6,.65);
-      border:1px solid rgba(255,203,6,.65);
-      color:#03539E;
-      padding:2px 8px;
-      border-radius:999px;
-      font-weight:700;
-      margin-left:8px;
-      font-size:11px;
-    }
+.badge{
+  background:rgba(255,203,6,.65);
+  border:1px solid rgba(255,203,6,.9);
+  color:#03539E;
+  padding:6px 14px;
+  border-radius:999px;
+  font-weight:700;
+  font-size:12px;
+  white-space:nowrap;
+}
+
   </style>
 </head>
 
 <body>
-  <div class="header">
-    <div class="header-inner">
-      <div class="mark" aria-hidden="true"></div>
-      <div>
-        <h1>Probability Calculator <span class="badge">Embry-Riddle Aeronautical University</span></h1>
-        <div class="sub">Binomial • Poisson • Normal — exact + Normal approximation (with continuity correction) for discrete</div>
-      </div>
-    </div>
+<div class="header">
+  <div class="header-inner">
+    <h1>Probability Calculator</h1>
+    <span class="badge">Embry-Riddle Aeronautical University</span>
   </div>
+</div>
 
   <div class="wrap">
     <div class="grid">
