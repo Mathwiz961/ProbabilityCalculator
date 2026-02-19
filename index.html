@@ -107,18 +107,21 @@
     .pillrow{ display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; }
 
 .pill{
-  display:inline-flex;         /* shrink to content */
-  align-items:center;
-  gap:8px;
+  display:inline-flex !important;
+  width:auto !important;
 
-  padding:6px 14px;            /* was too large */
-  border-radius:999px;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:8px !important;
 
-  border:1px solid var(--chipLine);
-  background:#ffffff;
+  padding:6px 14px !important;
+  border-radius:999px !important;
 
-  font-size:13px;
-  line-height:1.2;
+  border:1px solid var(--chipLine) !important;
+  background:#ffffff !important;
+
+  font-size:13px !important;
+  line-height:1.2 !important;
 }
 
     .btn{
