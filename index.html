@@ -105,13 +105,25 @@
 
     .row{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
 .pillrow{
+  
   display:flex;
   gap:10px;
   flex-wrap:wrap;
   align-items:center;
   justify-content:flex-start;   /* don't spread them */
 }
+.pillrow label.pill{
+  display:inline-flex;
+  width:auto;
+  flex:0 0 auto;
+  padding:6px 14px;
+}
 
+input[type="radio"], input[type="checkbox"]{
+  width:auto;
+  padding:0;
+  margin:0 6px 0 0;
+}
 .pill{
   display:inline-flex !important;
   width:auto !important;
@@ -128,6 +140,8 @@
 
   font-size:13px !important;
   line-height:1.2 !important;
+
+  flex: 0 0 auto;  /* do not grow or stretch */
 }
 
     .btn{
