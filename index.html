@@ -106,15 +106,20 @@
     .row{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
     .pillrow{ display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; }
 
-    .pill{
-      border:1px solid var(--chipLine);
-      background:var(--chipBg);
-      padding:8px 10px;
-      border-radius:999px;
-      display:flex; align-items:center; gap:8px;
-      color:var(--muted);
-      font-size:12px;
-    }
+.pill{
+  display:inline-flex;         /* shrink to content */
+  align-items:center;
+  gap:8px;
+
+  padding:6px 14px;            /* was too large */
+  border-radius:999px;
+
+  border:1px solid var(--chipLine);
+  background:#ffffff;
+
+  font-size:13px;
+  line-height:1.2;
+}
 
     .btn{
       cursor:pointer;
