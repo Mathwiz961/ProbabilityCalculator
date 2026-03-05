@@ -45,6 +45,43 @@ Designed specifically to be hosted on **GitHub Pages** and embedded in **Canvas*
   - \( P(X = x) = 0 \)
   - \( P(X ≤ x) = P(X < x) \)
 
+
+----
+
+## **Updated Functionality** 
+🔁 Inverse Normal (Find x from a Probability)
+
+This tool now includes **Inverse Normal** functionality.
+
+Use the **Mode** dropdown in the Probability Query panel:
+
+- **Probability (find P)** → computes a probability from x (or between a and b)
+- **Inverse (Normal only — find x)** → computes x (or bounds) from a probability p
+
+> Inverse mode is available for **Normal(μ, σ)** only.
+
+### Inverse Options
+
+In **Inverse** mode, choose one of the following:
+
+1) **Find x such that P(X ≤ x) = p**  
+   - Input: p  
+   - Output: x (the p-th percentile of Normal(μ, σ))
+
+2) **Find x such that P(X ≥ x) = p**  
+   - Input: p  
+   - Output: x (right-tail cutoff)  
+   - Internally uses: P(X ≤ x) = 1 − p
+
+3) **Find bounds a, b such that P(a ≤ X ≤ b) = p (centered about μ)**  
+   - Input: p  
+   - Output: symmetric bounds a and b around μ  
+   - Returns: a = μ − zσ and b = μ + zσ
+
+### Notes
+- p must satisfy: **0 < p < 1**
+- Normal is continuous, so **P(X = x) = 0** and **≤ vs < gives the same result**.
+
 ---
 
 ### Normal Approximation (Discrete)
