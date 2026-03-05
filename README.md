@@ -161,18 +161,6 @@ The app icon will appear on your home screen.
 
 ---
 
-## 🌐 Embedding in Canvas or Other LMS
-
-The calculator can be embedded using an iframe:
-
-```html
-<iframe
-src="https://mathwiz961.github.io/ProbabilityCalculator/"
-width="100%"
-height="900"
-style="border:0;">
-</iframe>
-
 ## 📜 License
 
 This project is licensed under the **MIT License**.
