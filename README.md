@@ -129,6 +129,50 @@ Edit a Canvas page → Switch to **HTML editor** → Paste:
 ```
 ---
 
+## 📱 Install as a Mobile App (PWA)
+
+This calculator can be installed on a phone or tablet and used like a normal app.
+
+### Android (Chrome)
+
+1. Open the app in Chrome:
+
+   https://mathwiz961.github.io/ProbabilityCalculator/
+
+2. Tap the **⋮ menu** in the upper right.
+3. Select **Install App** or **Add to Home Screen**.
+4. Confirm installation.
+
+The **Probability Calculator** will appear with your other apps and can run offline.
+
+---
+
+### iPhone / iPad (Safari)
+
+1. Open the app in **Safari**:
+
+   https://mathwiz961.github.io/ProbabilityCalculator/
+
+2. Tap the **Share** button.
+3. Scroll down and choose **Add to Home Screen**.
+4. Tap **Add**.
+
+The app icon will appear on your home screen.
+
+---
+
+## 🌐 Embedding in Canvas or Other LMS
+
+The calculator can be embedded using an iframe:
+
+```html
+<iframe
+src="https://mathwiz961.github.io/ProbabilityCalculator/"
+width="100%"
+height="900"
+style="border:0;">
+</iframe>
+
 ## 📜 License
 
 This project is licensed under the **MIT License**.
