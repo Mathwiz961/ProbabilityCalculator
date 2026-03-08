@@ -1,4 +1,4 @@
-const CACHE_NAME = "probability-calculator-v2";
+const CACHE_NAME = "probability-calculator-v3";
 const ASSETS = [
   "./",
   "./index.html",
@@ -24,7 +24,6 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// Cache-first for same-origin requests
 self.addEventListener("fetch", (event) => {
   const req = event.request;
   const url = new URL(req.url);
