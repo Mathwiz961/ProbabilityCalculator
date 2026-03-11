@@ -224,6 +224,7 @@
           <option value="binom">Binomial (n, p)</option>
           <option value="pois">Poisson (λ)</option>
           <option value="norm">Normal (μ, σ)</option>
+          <option value="t">Student t (df)</option>
         </select>
 
         <div id="binomParams">
@@ -278,7 +279,12 @@
               </div>
             </div>
           </div>
-
+          
+<div id="tParams" class="hide">
+  <label for="df">df (degrees of freedom)</label>
+  <input id="df" type="number" step="1" min="1" value="10" />
+  <div class="hint">Student t is continuous: P(T = t) = 0 and ≤ vs &lt; makes no difference.</div>
+</div>
           <div id="normDataBlock" class="hide">
             <label for="data">Paste data (numbers separated by commas/spaces/new lines)</label>
             <textarea id="data" placeholder="Example:
@@ -526,6 +532,122 @@ function sd(nums, mode){
   return Math.sqrt(ss/denom);
 }
 
+/* ---------- Beta / Student t helpers ---------- */
+
+// Continued fraction for incomplete beta
+function betacf(a, b, x){
+  const MAXIT = 200;
+  const EPS = 3e-12;
+  const FPMIN = 1e-30;
+
+  let qab = a + b;
+  let qap = a + 1;
+  let qam = a - 1;
+
+  let c = 1;
+  let d = 1 - qab * x / qap;
+  if (Math.abs(d) < FPMIN) d = FPMIN;
+  d = 1 / d;
+  let h = d;
+
+  for (let m = 1; m <= MAXIT; m++){
+    let m2 = 2 * m;
+
+    let aa = m * (b - m) * x / ((qam + m2) * (a + m2));
+    d = 1 + aa * d;
+    if (Math.abs(d) < FPMIN) d = FPMIN;
+    c = 1 + aa / c;
+    if (Math.abs(c) < FPMIN) c = FPMIN;
+    d = 1 / d;
+    h *= d * c;
+
+    aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2));
+    d = 1 + aa * d;
+    if (Math.abs(d) < FPMIN) d = FPMIN;
+    c = 1 + aa / c;
+    if (Math.abs(c) < FPMIN) c = FPMIN;
+    d = 1 / d;
+    let del = d * c;
+    h *= del;
+
+    if (Math.abs(del - 1) < EPS) break;
+  }
+
+  return h;
+}
+
+// Regularized incomplete beta I_x(a,b)
+function regIncompleteBeta(x, a, b){
+  if (x <= 0) return 0;
+  if (x >= 1) return 1;
+
+  const bt = Math.exp(
+    logGamma(a + b) - logGamma(a) - logGamma(b) +
+    a * Math.log(x) + b * Math.log(1 - x)
+  );
+
+  if (x < (a + 1) / (a + b + 2)){
+    return bt * betacf(a, b, x) / a;
+  } else {
+    return 1 - bt * betacf(b, a, 1 - x) / b;
+  }
+}
+
+// Student t CDF
+function tCDF(t, df){
+  if (!(df > 0)) return NaN;
+  if (t === 0) return 0.5;
+
+  const x = df / (df + t * t);
+  const ib = regIncompleteBeta(x, df / 2, 0.5);
+
+  if (t > 0){
+    return 1 - 0.5 * ib;
+  } else {
+    return 0.5 * ib;
+  }
+}
+
+// Student t single probability
+function probSingleT(df, t, kind){
+  const F = tCDF(t, df);
+  if (kind === "lt" || kind === "le") return F;
+  if (kind === "gt" || kind === "ge") return 1 - F;
+  return NaN;
+}
+
+// Student t between probability
+function probBetweenT(df, a, b){
+  let lo = a, hi = b;
+  if (hi < lo){ const temp = lo; lo = hi; hi = temp; }
+  return tCDF(hi, df) - tCDF(lo, df);
+}
+
+// Inverse Student t by bisection
+function invT(p, df){
+  if (!(p > 0 && p < 1)) return NaN;
+  if (!(df > 0)) return NaN;
+  if (p === 0.5) return 0;
+
+  let lo = -100;
+  let hi = 100;
+
+  while (tCDF(lo, df) > p) lo *= 2;
+  while (tCDF(hi, df) < p) hi *= 2;
+
+  for (let i = 0; i < 120; i++){
+    const mid = (lo + hi) / 2;
+    const Fmid = tCDF(mid, df);
+    if (Fmid < p){
+      lo = mid;
+    } else {
+      hi = mid;
+    }
+  }
+
+  return (lo + hi) / 2;
+}  
+
 /* ---------- Probability wrappers ---------- */
 
 function probSingleDiscrete(cdfFunc, x, kind){
@@ -593,7 +715,8 @@ const modeEl = document.getElementById("mode");
 const binomParams = document.getElementById("binomParams");
 const poisParams  = document.getElementById("poisParams");
 const normParams  = document.getElementById("normParams");
-
+const tParams     = document.getElementById("tParams");
+  
 const probModeBlock = document.getElementById("probModeBlock");
 const invModeBlock  = document.getElementById("invModeBlock");
 
@@ -617,22 +740,22 @@ function refreshDistUI(){
   binomParams.classList.toggle("hide", d !== "binom");
   poisParams.classList.toggle("hide",  d !== "pois");
   normParams.classList.toggle("hide",  d !== "norm");
+  tParams.classList.toggle("hide",     d !== "t");
 
   const isDiscrete = (d === "binom" || d === "pois");
   if (discreteHint){
     discreteHint.textContent = isDiscrete
       ? "Discrete: exact mode floors x to an integer count. Approx mode uses continuity correction."
-      : "Normal is continuous: P(X=x)=0 and ≤ vs < makes no difference.";
+      : "Normal and Student t are continuous: P(X=x)=0 and ≤ vs < makes no difference.";
   }
   if (betweenHint){
     betweenHint.textContent = isDiscrete
       ? "Discrete: include/exclude endpoints supported (exact + approx)."
-      : "Normal is continuous: inclusive/exclusive endpoints give the same probability.";
+      : "Normal and Student t are continuous: inclusive/exclusive endpoints give the same probability.";
   }
 
-  // Inverse mode only allowed for Normal
-  if (modeEl.value === "inv" && d !== "norm"){
-    setOutput("Inverse mode is available for Normal(μ,σ) only. Switch Distribution to Normal.", "err");
+  if (modeEl.value === "inv" && d !== "norm" && d !== "t"){
+    setOutput("Inverse mode is available for Normal(μ,σ) and Student t only.", "err");
   }
 }
 
@@ -654,7 +777,7 @@ function refreshModeUI(){
   invModeBlock.classList.toggle("hide",  m !== "inv");
 
   if (m === "inv"){
-    footerNote.textContent = "Inverse mode: Normal only. Use p in (0,1). Centered bounds return μ ± zσ.";
+    footerNote.textContent = "Inverse mode: Normal and Student t. Use p in (0,1). Centered bounds return symmetric bounds.";
   } else {
     footerNote.textContent = "Tip: Binomial/Poisson exact mode floors x/a/b to integers. Normal approximation uses continuity correction.";
   }
@@ -701,6 +824,8 @@ document.getElementById("resetBtn").addEventListener("click", ()=>{
   document.querySelector('input[name="normMode"][value="params"]').checked = true;
   document.querySelector('input[name="sdMode"][value="sample"]').checked = true;
 
+  document.getElementById("df").value = 10;
+  
   document.getElementById("x").value = 3;
   document.getElementById("a").value = 2;
   document.getElementById("b").value = 6;
@@ -724,7 +849,7 @@ document.getElementById("calcBtn").addEventListener("click", ()=>{
   // --- Inverse mode (Normal only) ---
   if (mode === "inv"){
     try{
-      if (d !== "norm") throw new Error("Inverse mode is available for Normal(μ,σ) only.");
+      if (d !== "norm") throw new Error("Inverse mode is available for Normal(μ,σ) and Student t(df) only.");
 
       const mu = Number(document.getElementById("mu").value);
       const sigma = Number(document.getElementById("sigma").value);
@@ -768,6 +893,42 @@ document.getElementById("calcBtn").addEventListener("click", ()=>{
         return;
       }
 
+            if (d === "t"){
+        const df = Number(document.getElementById("df").value);
+        if (!Number.isFinite(df) || df < 1 || Math.floor(df) !== df){
+          throw new Error("df must be a positive integer.");
+        }
+
+        if (invType === "left"){
+          const t = invT(p, df);
+          setOutput(
+            `Inverse Student t\nFind t such that P(T ≤ t) = p\n\ndf = ${df}\np = ${p}\n\nt ≈ ${t}`,
+            "ok"
+          );
+          return;
+        }
+
+        if (invType === "right"){
+          const t = invT(1 - p, df);
+          setOutput(
+            `Inverse Student t\nFind t such that P(T ≥ t) = p\n\ndf = ${df}\np = ${p}\n(uses left-tail = 1 − p)\n\nt ≈ ${t}`,
+            "ok"
+          );
+          return;
+        }
+
+        if (invType === "central"){
+          const tail = (1 - p) / 2;
+          const tcrit = invT(1 - tail, df);
+          const a = -tcrit;
+          const b = tcrit;
+          setOutput(
+            `Inverse Student t (Centered)\nFind a, b such that P(a ≤ T ≤ b) = p\n\ndf = ${df}\np = ${p}\n\na ≈ ${a}\nb ≈ ${b}`,
+            "ok"
+          );
+          return;
+        }
+      }
       throw new Error("Unknown inverse type.");
     }catch(e){
       setOutput(`Error: ${e.message}`, "err");
@@ -870,6 +1031,24 @@ document.getElementById("calcBtn").addEventListener("click", ()=>{
       } else {
         prob = probSingleNormal(mu, sigma, x, qt);
         summary = `Normal(μ=${mu}, σ=${sigma})\nQuery: ${qt} with x=${x} (≤ vs < same)`;
+      }
+    }
+
+        if (d === "t"){
+      const df = Number(document.getElementById("df").value);
+      if (!Number.isFinite(df) || df < 1 || Math.floor(df) !== df){
+        throw new Error("df must be a positive integer.");
+      }
+
+      if (qt === "between"){
+        prob = probBetweenT(df, a, b);
+        summary = `Student t(df=${df})\nBetween: a=${a}, b=${b} (inclusive/exclusive same)`;
+      } else if (qt === "eq"){
+        prob = 0;
+        summary = `Student t(df=${df})\nP(T = ${x}) = 0 (continuous)`;
+      } else {
+        prob = probSingleT(df, x, qt);
+        summary = `Student t(df=${df})\nQuery: ${qt} with t=${x} (≤ vs < same)`;
       }
     }
 
