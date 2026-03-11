@@ -9,198 +9,185 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ERAU Probability Calculator </title>
 
-  <style>
-    :root{
-      /* ERAU brand */
-      --navy:#03539E;
-      --navy2:#002d57;
-      --gold:#FFCB06;
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ERAU Probability Calculator</title>
 
-      /* Light UI */
-      --bg:#ffffff;
-      --surface:#f3f5f7;
-      --surface2:#eef1f4;
-      --line:#d6dbe1;
+<style>
+  :root{
+    --navy:#03539E;
+    --navy2:#002d57;
+    --gold:#FFCB06;
+    --bg:#ffffff;
+    --surface:#f3f5f7;
+    --surface2:#eef1f4;
+    --line:#d6dbe1;
+    --text:#0f172a;
+    --muted:#475569;
+    --btn:var(--navy);
+    --btnHover:#023f78;
+    --btnText:#ffffff;
+    --chipBg:#ffffff;
+    --chipLine:#d6dbe1;
+    --bad:#b91c1c;
+    --good:#166534;
+  }
 
-      /* Text */
-      --text:#0f172a;
-      --muted:#475569;
+  body{
+    margin:0;
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+  }
 
-      /* Buttons */
-      --btn:var(--navy);
-      --btnHover:#023f78;
-      --btnText:#ffffff;
+  .header{
+    background:linear-gradient(90deg, var(--navy), var(--navy2));
+    color:#fff;
+    border-bottom:4px solid var(--gold);
+    padding:16px 18px;
+  }
 
-      /* Chips */
-      --chipBg:#ffffff;
-      --chipLine:#d6dbe1;
+  .header-inner{
+    max-width:1100px;
+    margin:0 auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:14px;
+  }
 
-      /* Status */
-      --bad:#b91c1c;
-      --good:#166534;
-    }
+  .title-block{ display:flex; flex-direction:column; }
+  h1{ margin:0; font-size:20px; font-weight:800; letter-spacing:.2px; }
+  .subheader{
+    margin-top:4px;
+    font-size:12.5px;
+    opacity:.92;
+    color:#ffffff;
+    letter-spacing:.35px;
+  }
 
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      background:var(--bg);
-      color:var(--text);
-    }
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    background:#FFCB06;
+    border:1px solid #e6b800;
+    color:#03539E;
+    padding:7px 14px;
+    border-radius:999px;
+    font-weight:800;
+    font-size:12px;
+    white-space:nowrap;
+  }
 
-    .header{
-      background:linear-gradient(90deg, var(--navy), var(--navy2));
-      color:#fff;
-      border-bottom:4px solid var(--gold);
-      padding:16px 18px;
-    }
+  .wrap{ max-width:1100px; margin:0 auto; padding:18px 18px 28px; }
 
-    .header-inner{
-      max-width:1100px;
-      margin:0 auto;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:14px;
-    }
+  .grid{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-top:16px; }
+  @media (max-width: 900px){ .grid{ grid-template-columns: 1fr; } }
 
-    .title-block{ display:flex; flex-direction:column; }
-    h1{ margin:0; font-size:20px; font-weight:800; letter-spacing:.2px; }
-    .subheader{
-      margin-top:4px;
-      font-size:12.5px;
-      opacity:.92;
-      color:#ffffff;
-      letter-spacing:.35px;
-    }
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:14px;
+    box-shadow:0 6px 18px rgba(2, 31, 59, .08);
+  }
+  .card h2{ margin:0 0 10px; font-size:15px; font-weight:800; color:#0b1b33; }
 
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      background:#FFCB06;          /* 100% opacity */
-      border:1px solid #e6b800;
-      color:#03539E;               /* navy text */
-      padding:7px 14px;
-      border-radius:999px;
-      font-weight:800;
-      font-size:12px;
-      white-space:nowrap;
-    }
+  label{ display:block; color:var(--muted); font-size:12px; margin:10px 0 6px; }
 
-    .wrap{ max-width:1100px; margin:0 auto; padding:18px 18px 28px; }
+  input:not([type="radio"]):not([type="checkbox"]), select, textarea{
+    width:100%;
+    box-sizing:border-box;
+    padding:10px 10px;
+    border-radius:12px;
+    border:1px solid var(--line);
+    background:#ffffff;
+    color:var(--text);
+    outline:none;
+  }
+  textarea{ min-height:110px; resize:vertical; }
 
-    .grid{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-top:16px; }
-    @media (max-width: 900px){ .grid{ grid-template-columns: 1fr; } }
+  input[type="radio"], input[type="checkbox"]{
+    width:auto;
+    padding:0;
+    margin:0 6px 0 0;
+  }
 
-    .card{
-      background:var(--surface);
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:14px;
-      box-shadow:0 6px 18px rgba(2, 31, 59, .08);
-    }
-    .card h2{ margin:0 0 10px; font-size:15px; font-weight:800; color:#0b1b33; }
+  .row{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+  .pillrow{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:flex-start;
+    margin-top:8px;
+  }
 
-    label{ display:block; color:var(--muted); font-size:12px; margin:10px 0 6px; }
+  .pillrow label.pill{
+    display:inline-flex;
+    width:auto;
+    flex:0 0 auto;
+  }
+  .pill{
+    border:1px solid var(--chipLine);
+    background:var(--chipBg);
+    padding:6px 14px;
+    border-radius:999px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.2;
+  }
 
-    /* Full-width inputs, but NOT radios/checkboxes */
-    input:not([type="radio"]):not([type="checkbox"]), select, textarea{
-      width:100%;
-      box-sizing:border-box;
-      padding:10px 10px;
-      border-radius:12px;
-      border:1px solid var(--line);
-      background:#ffffff;
-      color:var(--text);
-      outline:none;
-    }
-    textarea{ min-height:110px; resize:vertical; }
+  .btn{
+    cursor:pointer;
+    border:1px solid rgba(255,255,255,0);
+    background:var(--btn);
+    color:var(--btnText);
+    border-radius:14px;
+    padding:10px 12px;
+    font-weight:850;
+    transition: background .2s ease, transform .05s ease-in-out;
+    box-shadow:0 6px 14px rgba(3,83,158,.22);
+  }
+  .btn:hover{ background:var(--btnHover); }
+  .btn:active{ transform: translateY(1px); }
 
-    input[type="radio"], input[type="checkbox"]{
-      width:auto;
-      padding:0;
-      margin:0 6px 0 0;
-    }
+  .btn.secondary{
+    background:#ffffff;
+    color:var(--navy);
+    border:1px solid rgba(3,83,158,.35);
+    box-shadow:none;
+  }
+  .btn.secondary:hover{ background:var(--surface2); }
 
-    .row{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
-    .pillrow{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-      justify-content:flex-start;
-      margin-top:8px;
-    }
+  .out{
+    background:#ffffff;
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size:13px;
+    white-space:pre-wrap;
+  }
 
-    /* Pills hug text (no stretching) */
-    .pillrow label.pill{
-      display:inline-flex;
-      width:auto;
-      flex:0 0 auto;
-    }
-    .pill{
-      border:1px solid var(--chipLine);
-      background:var(--chipBg);
-      padding:6px 14px;
-      border-radius:999px;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.2;
-    }
+  .hint{ color:var(--muted); font-size:12px; margin-top:8px; line-height:1.35; }
+  .err{ color:var(--bad); font-weight:850; }
+  .ok{ color:var(--good); font-weight:850; }
+  .hide{ display:none !important; }
 
-    .btn{
-      cursor:pointer;
-      border:1px solid rgba(255,255,255,0);
-      background:var(--btn);
-      color:var(--btnText);
-      border-radius:14px;
-      padding:10px 12px;
-      font-weight:850;
-      transition: background .2s ease, transform .05s ease-in-out;
-      box-shadow:0 6px 14px rgba(3,83,158,.22);
-    }
-    .btn:hover{ background:var(--btnHover); }
-    .btn:active{ transform: translateY(1px); }
-
-    .btn.secondary{
-      background:#ffffff;
-      color:var(--navy);
-      border:1px solid rgba(3,83,158,.35);
-      box-shadow:none;
-    }
-    .btn.secondary:hover{ background:var(--surface2); }
-
-    .out{
-      background:#ffffff;
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:12px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size:13px;
-      white-space:pre-wrap;
-    }
-
-    .hint{ color:var(--muted); font-size:12px; margin-top:8px; line-height:1.35; }
-    .err{ color:var(--bad); font-weight:850; }
-    .ok{ color:var(--good); font-weight:850; }
-    .hide{ display:none !important; }
-
-    .footer{
-      margin-top:14px;
-      color:var(--muted);
-      font-size:11.5px;
-      border-top:1px solid var(--line);
-      padding-top:10px;
-    }
-  </style>
+  .footer{
+    margin-top:14px;
+    color:var(--muted);
+    font-size:11.5px;
+    border-top:1px solid var(--line);
+    padding-top:10px;
+  }
+</style>
 </head>
 
 <body>
@@ -208,7 +195,7 @@
     <div class="header-inner">
       <div class="title-block">
         <h1>Probability Calculator</h1>
-        <div class="subheader">Binomial • Poisson • Normal</div>
+        <div class="subheader">Binomial • Poisson • Normal • Student t</div>
       </div>
       <span class="badge">Embry-Riddle Aeronautical University</span>
     </div>
@@ -279,12 +266,7 @@
               </div>
             </div>
           </div>
-          
-<div id="tParams" class="hide">
-  <label for="df">df (degrees of freedom)</label>
-  <input id="df" type="number" step="1" min="1" value="10" />
-  <div class="hint">Student t is continuous: P(T = t) = 0 and ≤ vs &lt; makes no difference.</div>
-</div>
+
           <div id="normDataBlock" class="hide">
             <label for="data">Paste data (numbers separated by commas/spaces/new lines)</label>
             <textarea id="data" placeholder="Example:
@@ -298,8 +280,14 @@
           </div>
 
           <div class="footer">
-            <strong>Inverse Normal:</strong> switch the query mode to “Inverse (find x)” on the right panel.
+            <strong>Inverse mode:</strong> switch the query mode to “Inverse (find x)” on the right panel.
           </div>
+        </div>
+
+        <div id="tParams" class="hide">
+          <label for="df">df (degrees of freedom)</label>
+          <input id="df" type="number" step="1" min="1" value="10" />
+          <div class="hint">Student t is continuous: P(T = t) = 0 and ≤ vs &lt; makes no difference.</div>
         </div>
       </div>
 
@@ -312,7 +300,6 @@
           <option value="inv">Inverse (Normal or Student t only — find x)</option>
         </select>
 
-        <!-- PROBABILITY MODE -->
         <div id="probModeBlock">
           <label for="qtype">Choose probability form</label>
           <select id="qtype">
@@ -363,25 +350,24 @@
           </div>
         </div>
 
-        <!-- INVERSE MODE (NORMAL ONLY) -->
         <div id="invModeBlock" class="hide">
           <div class="hint">
-            Inverse mode works for <strong>Normal(μ, σ)</strong> only.
-            Choose a probability statement, enter the probability, and compute the corresponding x value(s).
+            Inverse mode works for <strong>Normal(μ, σ)</strong> and <strong>Student t(df)</strong>.
+            Choose a probability statement, enter the probability, and compute the corresponding x or t value(s).
           </div>
 
           <label for="invType">Inverse form</label>
           <select id="invType">
             <option value="left">Find x such that P(X ≤ x) = p</option>
             <option value="right">Find x such that P(X ≥ x) = p</option>
-            <option value="central">Find bounds a, b such that P(a ≤ X ≤ b) = p (centered about μ)</option>
+            <option value="central">Find bounds a, b such that P(a ≤ X ≤ b) = p (centered)</option>
           </select>
 
           <label for="invP">p (probability)</label>
           <input id="invP" type="number" step="0.000001" min="0" max="1" value="0.95" />
 
           <div class="hint">
-            For “centered” bounds, the tool returns symmetric bounds μ ± zσ.
+            For centered bounds, the tool returns symmetric bounds about μ for Normal and about 0 for Student t.
           </div>
         </div>
 
@@ -401,9 +387,6 @@
   </div>
 
 <script>
-/* ---------- Math helpers (no external libraries) ---------- */
-
-// erf approximation
 function erf(x){
   const sign = (x >= 0) ? 1 : -1;
   x = Math.abs(x);
@@ -417,9 +400,6 @@ function normalCDF(z){
   return 0.5 * (1 + erf(z / Math.SQRT2));
 }
 
-/* Inverse standard normal CDF (Acklam approximation)
-   Returns z such that P(Z <= z) = p, for 0 < p < 1
-*/
 function invNorm(p){
   if (!(p > 0 && p < 1)) return NaN;
 
@@ -459,7 +439,6 @@ function invNorm(p){
          (((((b[0]*r + b[1])*r + b[2])*r + b[3])*r + b[4])*r + 1);
 }
 
-// Lanczos approximation for log-gamma
 function logGamma(z){
   const p = [
     676.5203681218851, -1259.1392167224028, 771.32342877765313,
@@ -483,7 +462,6 @@ function logChoose(n,k){
   return logFactorial(n) - logFactorial(k) - logFactorial(n-k);
 }
 
-// Binomial PMF/CDF
 function binomPMF(k,n,p){
   if (k < 0 || k > n) return 0;
   if (p < 0 || p > 1) return NaN;
@@ -501,7 +479,6 @@ function binomCDF(k,n,p){
   return Math.min(1, Math.max(0, s));
 }
 
-// Poisson PMF/CDF
 function poisPMF(k,lambda){
   if (k < 0) return 0;
   if (lambda < 0) return NaN;
@@ -518,7 +495,6 @@ function poisCDF(k,lambda){
   return Math.min(1, Math.max(0, s));
 }
 
-// Parsing numeric data
 function parseNumbers(text){
   const parts = text.replace(/[\t\r\n]+/g, " ").replace(/,/g, " ").trim()
     .split(/\s+/).filter(Boolean);
@@ -532,9 +508,6 @@ function sd(nums, mode){
   return Math.sqrt(ss/denom);
 }
 
-/* ---------- Beta / Student t helpers ---------- */
-
-// Continued fraction for incomplete beta
 function betacf(a, b, x){
   const MAXIT = 200;
   const EPS = 3e-12;
@@ -576,7 +549,6 @@ function betacf(a, b, x){
   return h;
 }
 
-// Regularized incomplete beta I_x(a,b)
 function regIncompleteBeta(x, a, b){
   if (x <= 0) return 0;
   if (x >= 1) return 1;
@@ -593,7 +565,6 @@ function regIncompleteBeta(x, a, b){
   }
 }
 
-// Student t CDF
 function tCDF(t, df){
   if (!(df > 0)) return NaN;
   if (t === 0) return 0.5;
@@ -608,7 +579,6 @@ function tCDF(t, df){
   }
 }
 
-// Student t single probability
 function probSingleT(df, t, kind){
   const F = tCDF(t, df);
   if (kind === "lt" || kind === "le") return F;
@@ -616,14 +586,12 @@ function probSingleT(df, t, kind){
   return NaN;
 }
 
-// Student t between probability
 function probBetweenT(df, a, b){
   let lo = a, hi = b;
   if (hi < lo){ const temp = lo; lo = hi; hi = temp; }
   return tCDF(hi, df) - tCDF(lo, df);
 }
 
-// Inverse Student t by bisection
 function invT(p, df){
   if (!(p > 0 && p < 1)) return NaN;
   if (!(df > 0)) return NaN;
@@ -646,9 +614,7 @@ function invT(p, df){
   }
 
   return (lo + hi) / 2;
-}  
-
-/* ---------- Probability wrappers ---------- */
+}
 
 function probSingleDiscrete(cdfFunc, x, kind){
   const xf = Math.floor(x);
@@ -686,7 +652,6 @@ function probBetweenNormal(mu, sigma, a, b){
   return normalCDF((hi - mu)/sigma) - normalCDF((lo - mu)/sigma);
 }
 
-// Normal approximation for discrete RVs using continuity correction
 function approxDiscreteByNormal(mu, sigma, qt, x, a, b, incA, incB){
   const Phi = (t)=>normalCDF((t - mu)/sigma);
 
@@ -707,8 +672,6 @@ function approxDiscreteByNormal(mu, sigma, qt, x, a, b, incA, incB){
   return NaN;
 }
 
-/* ---------- UI logic ---------- */
-
 const distEl = document.getElementById("dist");
 const modeEl = document.getElementById("mode");
 
@@ -716,7 +679,7 @@ const binomParams = document.getElementById("binomParams");
 const poisParams  = document.getElementById("poisParams");
 const normParams  = document.getElementById("normParams");
 const tParams     = document.getElementById("tParams");
-  
+
 const probModeBlock = document.getElementById("probModeBlock");
 const invModeBlock  = document.getElementById("invModeBlock");
 
@@ -825,7 +788,7 @@ document.getElementById("resetBtn").addEventListener("click", ()=>{
   document.querySelector('input[name="sdMode"][value="sample"]').checked = true;
 
   document.getElementById("df").value = 10;
-  
+
   document.getElementById("x").value = 3;
   document.getElementById("a").value = 2;
   document.getElementById("b").value = 6;
@@ -846,54 +809,52 @@ document.getElementById("calcBtn").addEventListener("click", ()=>{
   const d = distEl.value;
   const mode = modeEl.value;
 
-  // --- Inverse mode (Normal only) ---
   if (mode === "inv"){
     try{
-      if (d !== "norm") throw new Error("Inverse mode is available for Normal(μ,σ) and Student t(df) only.");
-
-      const mu = Number(document.getElementById("mu").value);
-      const sigma = Number(document.getElementById("sigma").value);
-      if (!Number.isFinite(mu)) throw new Error("μ must be a valid number.");
-      if (!Number.isFinite(sigma) || sigma <= 0) throw new Error("σ must be > 0.");
-
       const invType = document.getElementById("invType").value;
       const p = Number(document.getElementById("invP").value);
       if (!(p > 0 && p < 1)) throw new Error("p must be between 0 and 1 (exclusive).");
 
-      if (invType === "left"){
-        const z = invNorm(p);
-        const x = mu + sigma * z;
-        setOutput(
-          `Inverse Normal\nFind x such that P(X ≤ x) = p\n\nNormal(μ=${mu}, σ=${sigma})\np = ${p}\n\nx ≈ ${x}`,
-          "ok"
-        );
-        return;
+      if (d === "norm"){
+        const mu = Number(document.getElementById("mu").value);
+        const sigma = Number(document.getElementById("sigma").value);
+        if (!Number.isFinite(mu)) throw new Error("μ must be a valid number.");
+        if (!Number.isFinite(sigma) || sigma <= 0) throw new Error("σ must be > 0.");
+
+        if (invType === "left"){
+          const z = invNorm(p);
+          const x = mu + sigma * z;
+          setOutput(
+            `Inverse Normal\nFind x such that P(X ≤ x) = p\n\nNormal(μ=${mu}, σ=${sigma})\np = ${p}\n\nx ≈ ${x}`,
+            "ok"
+          );
+          return;
+        }
+
+        if (invType === "right"){
+          const z = invNorm(1 - p);
+          const x = mu + sigma * z;
+          setOutput(
+            `Inverse Normal\nFind x such that P(X ≥ x) = p\n\nNormal(μ=${mu}, σ=${sigma})\np = ${p}\n(uses left-tail = 1 − p)\n\nx ≈ ${x}`,
+            "ok"
+          );
+          return;
+        }
+
+        if (invType === "central"){
+          const tail = (1 - p) / 2;
+          const z = invNorm(1 - tail);
+          const a = mu - sigma * z;
+          const b = mu + sigma * z;
+          setOutput(
+            `Inverse Normal (Centered)\nFind a, b such that P(a ≤ X ≤ b) = p (centered about μ)\n\nNormal(μ=${mu}, σ=${sigma})\np = ${p}\n\nz ≈ ${z}\na ≈ ${a}\nb ≈ ${b}`,
+            "ok"
+          );
+          return;
+        }
       }
 
-      if (invType === "right"){
-        const z = invNorm(1 - p);
-        const x = mu + sigma * z;
-        setOutput(
-          `Inverse Normal\nFind x such that P(X ≥ x) = p\n\nNormal(μ=${mu}, σ=${sigma})\np = ${p}\n(uses left-tail = 1 − p)\n\nx ≈ ${x}`,
-          "ok"
-        );
-        return;
-      }
-
-      if (invType === "central"){
-        // P(μ - zσ ≤ X ≤ μ + zσ) = p
-        const tail = (1 - p) / 2;
-        const z = invNorm(1 - tail);
-        const a = mu - sigma * z;
-        const b = mu + sigma * z;
-        setOutput(
-          `Inverse Normal (Centered)\nFind a, b such that P(a ≤ X ≤ b) = p (centered about μ)\n\nNormal(μ=${mu}, σ=${sigma})\np = ${p}\n\nz ≈ ${z}\na ≈ ${a}\nb ≈ ${b}`,
-          "ok"
-        );
-        return;
-      }
-
-            if (d === "t"){
+      if (d === "t"){
         const df = Number(document.getElementById("df").value);
         if (!Number.isFinite(df) || df < 1 || Math.floor(df) !== df){
           throw new Error("df must be a positive integer.");
@@ -929,14 +890,14 @@ document.getElementById("calcBtn").addEventListener("click", ()=>{
           return;
         }
       }
-      throw new Error("Unknown inverse type.");
+
+      throw new Error("Inverse mode is available for Normal(μ,σ) and Student t(df) only.");
     }catch(e){
       setOutput(`Error: ${e.message}`, "err");
       return;
     }
   }
 
-  // --- Probability mode (original behavior) ---
   const qt = qtypeEl.value;
 
   const x = Number(document.getElementById("x").value);
@@ -1034,7 +995,7 @@ document.getElementById("calcBtn").addEventListener("click", ()=>{
       }
     }
 
-        if (d === "t"){
+    if (d === "t"){
       const df = Number(document.getElementById("df").value);
       if (!Number.isFinite(df) || df < 1 || Math.floor(df) !== df){
         throw new Error("df must be a positive integer.");
@@ -1061,7 +1022,6 @@ document.getElementById("calcBtn").addEventListener("click", ()=>{
   }
 });
 
-// init
 refreshModeUI();
 refreshDistUI();
 refreshQueryUI();
@@ -1074,7 +1034,6 @@ if ("serviceWorker" in navigator) {
       .catch(err => console.error("Service worker registration failed:", err));
   });
 }
-  
 </script>
 </body>
 </html>
